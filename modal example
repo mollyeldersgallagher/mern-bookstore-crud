@@ -1,0 +1,102 @@
+/**
+ * @Date:   2020-02-03T18:52:36+00:00
+ * @Last modified time: 2020-02-06T19:20:36+00:00
+ */
+import React, {useState} from 'react';
+import 'bootstrap/dist/css/bootstrap.css';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
+import axios from 'axios';
+import Collapsible from 'react-collapsible';
+
+
+
+
+function deleteShow(id, completed){
+  console.log(id);
+    axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
+    // alert("Are you sure you want to delete this show?");
+
+    if(!window.confirm("Are you sure you want to delete this show?")){
+      return;
+    }
+
+    axios.delete(http://localhost:4000/shows/${id}).then(() => {
+
+    });
+    window.location = '/shows';
+    completed();
+  };
+
+function bringToEpisode(epi){
+  console.log(epi);
+}
+
+
+ function ShowModal(props) {
+   const [lgShow, setLgShow] = useState(false);
+   const loggedIn = props.status;
+
+   return (
+
+     <>
+       <Button className = "float-right" onClick={() => setLgShow(true)}>View This Show</Button>
+
+       <Modal
+         size="lg"
+         show={lgShow}
+         onHide={() => setLgShow(false)}
+         aria-labelledby="example-modal-sizes-title-lg"
+       >
+         <Modal.Header closeButton>
+           <Modal.Title id="example-modal-sizes-title-lg">
+             {props.data.name}
+           </Modal.Title>
+         </Modal.Header>
+        <Modal.Body>
+
+          <Collapsible trigger="Click here to View all episodes">
+          <Table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Brief Description</th>
+                <th>Season Number</th>
+                <th>Episode Number</th>
+                <th>Directed by</th>
+              </tr>
+            </thead>
+              {props.data.episode.map((e, i) => {
+                return(
+                  <React.Fragment key={i}>
+                  <tr>
+                    <td onClick={() => bringToEpisode(e._id)}>{e.title}</td>
+                    <td onClick={() => bringToEpisode(e._id)}>{e.description}</td>
+                    <td onClick={() => bringToEpisode(e._id)}>{e.seasonnumber}</td>
+                    <td onClick={() => bringToEpisode(e._id)}>{e.numinseason}</td>
+                    <td onClick={() => bringToEpisode(e._id)}>{e.director}</td>
+                  </tr>
+                  </React.Fragment>
+                );
+              })}
+            </Table>
+          </Collapsible>
+          {console.log(props)}
+          {(props.status) ? (
+            <>
+            <Button className = "float-right" variant="danger"onClick={() => deleteShow(props.data._id, props.info)}>Delete this show</Button>
+            </>
+          ) : (
+            <>
+            </>
+          )
+          }
+
+        </Modal.Body>
+        </Modal>
+     </>
+   );
+ }
+
+export default ShowModal;

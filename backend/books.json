@@ -1,0 +1,31 @@
+[
+    { "isbn": "9780261102217", "title": "The Hobbit", "author_id":[ObjectId("5e41f00bf5829e0b7c9463a0")], "genre_id": [ObjectId("5e41efdbf5829e0b7c946396"), ObjectId("5e41efdbf5829e0b7c946397"), ObjectId("5e41efdbf5829e0b7c946398"), ObjectId("5e41efdbf5829e0b7c946399")]},
+    { "isbn": "9780141986005", "title": "Good Night Stories for Rebel Girls","author_id":[ObjectId("5e41f01ef5829e0b7c9463a5"), ObjectId("5e41f01ef5829e0b7c9463a6")], "genre_id": [ObjectId("5e41efdbf5829e0b7c94639a"), ObjectId("5e41efdbf5829e0b7c94639b")]},
+    { "isbn": "9780007371464", "title": "Gangsta Granny","author_id":[ ObjectId("5e41f01ef5829e0b7c9463a7")],"genre_id": [ObjectId("5e41efdbf5829e0b7c94639b",  ObjectId("5e41efdbf5829e0b7c946398"), ObjectId("5e41efdbf5829e0b7c946399")]},
+    { "isbn": "9780007279067", "title": "Mr Stink","author_id":[ ObjectId("5e41f01ef5829e0b7c9463a7")], "genre_id": [ObjectId("5e41efdbf5829e0b7c94639b"), ObjectId("5e41efdbf5829e0b7c946399")]},
+    { "isbn": "9780593076842", "title": "Midnight in Chernobyl", "author_id":[ObjectId("5e41f294962fc44350128ff1")], "genre_id": [ObjectId("5e41efdbf5829e0b7c94639c")]}
+]
+
+
+[
+    { "name": "J R R Tolkien","email":"tolkien.j.r.r@gmil.com","phone":"0869087767"},
+    { "name": "Francesca Cavallo","email":"Francesca.cavallo@gmil.com","phone":"0895564473"},
+    { "name": "Elena Favilli","email":"e.favilli@gmil.com","phone":"0878875545"},
+    { "name": "David Walliams","email":"davidwalliams@gmil.com","phone":"0867721232"},
+    { "name": "Adam Higginbotham","email":"Adam.higginbotham@gmil.com","phone":"0876643343"}
+
+]
+
+[
+    { "name": "Action","description":"tolk"},
+    { "name": "Adventure","description":"Francesc"},
+    { "name": "Fantsy","description":""},
+    { "name": "Fiction","description":"davi"},
+    { "name": "Biography","description":"davi"},
+    { "name": "Childrens","description":"davi"},
+    { "name": "Drama","description":"davi"},
+    { "name": "Thriller","description":"davi"},
+    { "name": "Horror","description":"davi"},
+    { "name": "Romance","description":"davi"},
+
+]
