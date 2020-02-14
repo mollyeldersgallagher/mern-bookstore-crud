@@ -1,26 +1,37 @@
-/**
- * @Date:   2020-02-03T10:14:00+00:00
- * @Last modified time: 2020-02-10T12:53:54+00:00
- */
-
-
-
-import React, { Component } from 'react';
-import axios from 'axios';
-import Table from 'react-bootstrap/Table'
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+import axios from "axios";
+import Table from "react-bootstrap/Table";
+import { Link } from "react-router-dom";
+import {
+  Card,
+  ListGroup,
+  ListGroupItem,
+  CardColumns,
+  Button
+} from "react-bootstrap";
+import defaultCover from "../../placeholder.png";
 
 const Book = props => (
-  <tr>
-    <td><Link to={`/books/${props.book._id}`}>{props.book.isbn}</Link></td>
-    <td><Link to={`/books/${props.book._id}`}>{props.book.title}</Link></td>
-    <td><Link to={`/books/update/${props.book._id}`}>Update</Link></td>
-    <td><Link to={`/books/delete/${props.book._id}`}>Delete</Link></td>
-  </tr>
-)
+  <Card style={{ width: "18rem" }}>
+    <Card.Img variant="top" src={defaultCover} />
+    <Card.Body>
+      <Card.Title>{props.book.title}</Card.Title>
+      <Card.Text>
+        Some quick example text to build on the card title and make up the bulk
+        of the card's content.
+      </Card.Text>
+    </Card.Body>
+    <Card.Body>
+      <Card.Link href={`books/${props.book._id}`}>Show Book</Card.Link>
+      {/* <Card.Link href="#">Another Link</Card.Link> */}
+    </Card.Body>
+    <Card.Footer>
+      <small className="text-muted">{props.book.lastUpdated}</small>
+    </Card.Footer>
+  </Card>
+);
 
 export default class BookIndex extends Component {
-
   constructor(props) {
     super(props);
 
@@ -30,42 +41,43 @@ export default class BookIndex extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:4000/books/')
-    .then(response => {
-      console.log(response);
-      this.setState({
-        books: response.data
+    axios
+      .get("http://localhost:4000/books/")
+      .then(response => {
+        console.log(response);
+        this.setState({
+          books: response.data
+        });
       })
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   bookList() {
     return this.state.books.map(b => {
       return <Book book={b} key={b.isbn} />;
-    })
+    });
   }
 
   render() {
     return (
-      <div>
+      <>
         <h3>Book List</h3>
-        <Table striped bordered hover variant="dark">
-          <thead>
-            <tr>
-              <th>ISBN</th>
-              <th>Title</th>
-              <th>Action</th>
+        <>
+          {localStorage.jwtToken != null ? (
+            <Button>Add Book</Button>
+          ) : (
+            <>
+              <Button as={Link} to="/register">
+                Login to Create
+              </Button>
+            </>
+          )}
 
-            </tr>
-          </thead>
-          <tbody>
-            { this.bookList() }
-          </tbody>
-        </Table>
-      </div>
+          <CardColumns>{this.bookList()}</CardColumns>
+        </>
+      </>
     );
   }
 }

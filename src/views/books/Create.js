@@ -52,9 +52,9 @@ export default class BookCreate extends Component {
       });
     });
   }
-  componentWillMount() {
-    this.getImageData();
-  }
+  // componentWillMount() {
+  //   this.getImageData();
+  // }
 
   handleInputChange = e => {
     const target = e.target;
@@ -111,24 +111,24 @@ export default class BookCreate extends Component {
     });
   };
 
-  cover = e => {
-    const name = e.target.name;
-    const value = target.type === "file" ? target.file : target.value;
+  // cover = e => {
+  //   const name = e.target.name;
+  //   const value = target.type === "file" ? target.file : target.value;
 
-    // axios
-    //   .post("http://localhost:4000/upload")
-    //   .then(res => {
-    //     console.log(res.data);
-    //     this.setState({
-    //       cover: res.data
-    //     });
-    //     //  window.location = "/";
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //     //  window.location = '/books/create';
-    //   });
-  };
+  //   // axios
+  //   //   .post("http://localhost:4000/upload")
+  //   //   .then(res => {
+  //   //     console.log(res.data);
+  //   //     this.setState({
+  //   //       cover: res.data
+  //   //     });
+  //   //     //  window.location = "/";
+  //   //   })
+  //   //   .catch(err => {
+  //   //     console.log(err);
+  //   //     //  window.location = '/books/create';
+  //   //   });
+  // };
 
   onSubmit = e => {
     e.preventDefault();
