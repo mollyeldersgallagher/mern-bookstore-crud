@@ -4,17 +4,14 @@ import { Link } from "react-router-dom";
 import Badge from "react-bootstrap/Badge";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import Alert from "react-bootstrap/Alert";
+import { Alert, ListGroup, ListGroupItem } from "react-bootstrap";
 
-const Genre = props => <Badge variant="light">{props.genre}</Badge>;
-const Author = props => <Badge variant="light">{props.author}</Badge>;
-
-export default class BookShow extends Component {
+export default class GenreShow extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      book: {},
+      genre: {},
       show: false,
       loading: true
     };
@@ -24,11 +21,11 @@ export default class BookShow extends Component {
     const { id } = this.props.match.params;
 
     axios
-      .get(`http://localhost:4000/books/${id}`)
+      .get(`http://localhost:4000/genres/${id}`)
       .then(response => {
         console.log(response);
         this.setState({
-          book: response.data,
+          genre: response.data,
           loading: false
         });
       })
@@ -43,11 +40,11 @@ export default class BookShow extends Component {
       "jwtToken"
     );
     axios
-      .delete(`http://localhost:4000/books/${id}`)
+      .delete(`http://localhost:4000/genres/${id}`)
       .then(response => {
         console.log(response);
         this.setState({
-          book: response.data,
+          genre: response.data,
           loading: false
         });
       })
@@ -57,23 +54,13 @@ export default class BookShow extends Component {
     window.location = "/";
   }
 
-  genreList() {
-    return this.state.book.genre_id.map((currentGenre, index) => {
-      return <Genre genre={currentGenre.name} key={index} />;
-    });
-  }
-  authorList() {
-    return this.state.book.author_id.map((currentAuthor, index) => {
-      return <Author author={currentAuthor.name} key={index} />;
-    });
-  }
   AlertDismissible() {
     return (
       <>
         <Alert show={this.state.show} variant="secondary">
           <Alert.Heading>Confirm</Alert.Heading>
           <p>
-            Are you sure you want to delete this book - {this.state.book.title}
+            Are you sure you want to delete this genre - {this.state.genre.name}
           </p>
           <hr />
           <div className="d-flex justify-content-end">
@@ -93,7 +80,7 @@ export default class BookShow extends Component {
   }
 
   render() {
-    const { book, loading, show } = this.state;
+    const { genre, loading, show } = this.state;
 
     if (loading) {
       return (
@@ -108,15 +95,14 @@ export default class BookShow extends Component {
         <br />
         <Card>
           {this.AlertDismissible()}
-          <Card.Header as="h5">
-            {book.title} <span className="float-right">{this.genreList()}</span>
-          </Card.Header>
+          <Card.Header as="h5">{genre.name}</Card.Header>
 
           <Card.Body>
             <Card.Title>Synopsis</Card.Title>
-            <Card.Text>{this.state.book.description}</Card.Text>
+            <Card.Text>There is no synopsis in the DB</Card.Text>
+
             <Button as={Link} to="/" variant="primary">
-              View all books
+              View all genres
             </Button>
             <Button
               as={Link}
@@ -130,8 +116,13 @@ export default class BookShow extends Component {
               Delete
             </Button>
           </Card.Body>
+          <ListGroup className="list-group-flush">
+            {this.state.genre.books.map(book => {
+              return <ListGroupItem>{book.title}</ListGroupItem>;
+            })}
+          </ListGroup>
           <Card.Footer>
-            <span className="float-right">{this.authorList()}</span>
+            <span className="float-right">{this.state.description}</span>
           </Card.Footer>
         </Card>
       </div>

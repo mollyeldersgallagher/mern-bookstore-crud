@@ -26,12 +26,13 @@ export default class BookCreate extends Component {
     this.state = {
       isbn: "",
       title: "",
+      description: "",
       genres: [],
       genre_id: [],
       authors: [],
-      authors_id: [],
-      cover: { name: null },
-      images: []
+      authors_id: []
+      // cover: { name: null },
+      // images: []
     };
   }
 
@@ -69,9 +70,8 @@ export default class BookCreate extends Component {
     console.log(this.state.author_id);
   };
 
-  onAddAuthor = e => {
+  addAuthor = e => {
     const target = e.target;
-    // const value = target.as === 'selected' ? target.selected : target.value;
     const name = target.name;
 
     var options = target.options;
@@ -81,9 +81,6 @@ export default class BookCreate extends Component {
         value.push(options[i].value);
       }
     }
-    //  this.props.someCallback(value);
-
-    console.log(`Input name ${name}. Input value ${value}.`);
 
     this.setState({
       [name]: value
@@ -92,7 +89,6 @@ export default class BookCreate extends Component {
 
   addGenre = e => {
     const target = e.target;
-    // const value = target.as === 'selected' ? target.selected : target.value;
     const name = target.name;
 
     var options = target.options;
@@ -102,9 +98,6 @@ export default class BookCreate extends Component {
         value.push(options[i].value);
       }
     }
-    //  this.props.someCallback(value);
-
-    console.log(`Input name ${name}. Input value ${value}.`);
 
     this.setState({
       [name]: value
@@ -139,9 +132,10 @@ export default class BookCreate extends Component {
     const book = {
       isbn: this.state.isbn,
       title: this.state.title,
+      description: this.state.description,
       genre_id: genreJSON,
-      author_id: authorJSON,
-      cover: this.state.cover
+      author_id: authorJSON
+      // cover: this.state.cover
     };
 
     console.log(book);
@@ -157,10 +151,10 @@ export default class BookCreate extends Component {
       })
       .catch(err => {
         console.log(err);
-        //  window.location = '/books/create';
+        window.location = "/books/create";
       });
 
-    // window.location = '/';
+    window.location = "/";
   };
 
   genreList() {
@@ -185,6 +179,7 @@ export default class BookCreate extends Component {
             </Form.Label>
             <Col sm={10}>
               <Form.Control
+                required
                 type="text"
                 placeholder="ISBN"
                 name="isbn"
@@ -200,10 +195,26 @@ export default class BookCreate extends Component {
             </Form.Label>
             <Col sm={10}>
               <Form.Control
+                required
                 type="text"
                 placeholder="Title"
                 name="title"
                 value={this.state.title}
+                onChange={this.handleInputChange}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} controlId="formHorizontalDescription">
+            <Form.Label column sm={2}>
+              Description
+            </Form.Label>
+            <Col sm={10}>
+              <Form.Control
+                required
+                type="text"
+                placeholder="Description"
+                name="description"
+                value={this.state.description}
                 onChange={this.handleInputChange}
               />
             </Col>
@@ -216,7 +227,9 @@ export default class BookCreate extends Component {
             <Col sm={4}>
               <InputGroup>
                 <Form.Control
+                  required
                   as="select"
+                  multiple
                   placeholder="Genre"
                   name="genre_id"
                   onChange={this.addGenre}
@@ -226,8 +239,27 @@ export default class BookCreate extends Component {
               </InputGroup>
             </Col>
           </Form.Group>
+          <Form.Group as={Row} controlId="formHorizontalAuthor">
+            <Form.Label column sm={2}>
+              Author
+            </Form.Label>
+            <Col sm={4}>
+              <InputGroup>
+                <Form.Control
+                  required
+                  as="select"
+                  multiple
+                  placeholder="Author"
+                  name="author_id"
+                  onChange={this.addAuthor}
+                >
+                  {this.authorList()}
+                </Form.Control>
+              </InputGroup>
+            </Col>
+          </Form.Group>
 
-          <Form.Group
+          {/* <Form.Group
             as={Row}
             controlId="formHorizontalAuthor"
             className="custome-file"
@@ -236,7 +268,7 @@ export default class BookCreate extends Component {
               Cover Upload
             </Form.Label>
             <Col sm={8}>
-              {/* <InputGroup> */}
+               <InputGroup> 
               <Form.Control
                 type="file"
                 placeholder="cover"
@@ -244,7 +276,7 @@ export default class BookCreate extends Component {
                 onChange={this.cover}
               ></Form.Control>
             </Col>
-          </Form.Group>
+          </Form.Group> */}
 
           <br />
           <Form.Group as={Row}>

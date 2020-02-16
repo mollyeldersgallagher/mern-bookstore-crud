@@ -1,93 +1,90 @@
-/**
- * @Date:   2020-01-28T11:33:57+00:00
- * @Last modified time: 2020-01-28T11:33:59+00:00
- */
- import React, { Component } from 'react';
- import axios from 'axios';
- import Form from 'react-bootstrap/Form'
- import Row from 'react-bootstrap/Row'
- import Col from 'react-bootstrap/Col'
- import Button from 'react-bootstrap/Button'
+import React, { Component } from "react";
+import axios from "axios";
+import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
 
- export default class Register extends Component {
-   constructor(props) {
-     super(props);
+export default class Register extends Component {
+  constructor(props) {
+    super(props);
 
-     this.state = {
-       email: '',
-       password: ''
-     };
+    this.state = {
+      email: "",
+      password: ""
+    };
+  }
 
-   }
+  handleInputChange = e => {
+    const target = e.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const name = target.name;
 
-   handleInputChange = e => {
-     const target = e.target;
-     const value = target.type === 'checkbox' ? target.checked : target.value;
-     const name = target.name;
+    this.setState({
+      [name]: value
+    });
+  };
 
-     console.log(`Input name ${name}. Input value ${value}.`);
+  onSubmit = e => {
+    e.preventDefault();
 
-     this.setState({
-       [name]: value
-     });
-   };
+    const user = {
+      email: this.state.email,
+      password: this.state.password
+    };
 
-   onSubmit = e => {
-     e.preventDefault();
+    axios
+      .post("http://localhost:4000/account/register", user)
+      .then(res => console.log(res.data))
+      .catch(err => console.log(err));
 
-     const user = {
-       email: this.state.email,
-       password: this.state.password
-     }
+    window.location = "/login";
+  };
 
-     console.log(user);
+  render() {
+    return (
+      <div>
+        <h3>Register user</h3>
+        <Form onSubmit={this.onSubmit}>
+          <Form.Group as={Row} controlId="formHorizontalIMDB">
+            <Form.Label column sm={2}>
+              Email
+            </Form.Label>
+            <Col sm={10}>
+              <Form.Control
+                type="email"
+                placeholder="Email"
+                required
+                name="email"
+                value={this.state.email}
+                onChange={this.handleInputChange}
+              />
+            </Col>
+          </Form.Group>
 
-     axios.post('http://localhost:4000/account/register', user)
-       .then(res => console.log(res.data))
-       .catch(err => console.log(err));
+          <Form.Group as={Row} controlId="formHorizontalTitle">
+            <Form.Label column sm={2}>
+              Password
+            </Form.Label>
+            <Col sm={10}>
+              <Form.Control
+                required
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={this.state.password}
+                onChange={this.handleInputChange}
+              />
+            </Col>
+          </Form.Group>
 
-     window.location = '/login';
-   };
-
-   render() {
-
-     return (
-     <div>
-       <h3>Register user</h3>
-       <Form onSubmit={this.onSubmit}>
-         <Form.Group as={Row} controlId="formHorizontalIMDB">
-           <Form.Label column sm={2}>
-             Email
-           </Form.Label>
-           <Col sm={10}>
-             <Form.Control type="email" placeholder="Email"
-               name="email"
-               value={this.state.email}
-               onChange={this.handleInputChange}
-             />
-           </Col>
-         </Form.Group>
-
-         <Form.Group as={Row} controlId="formHorizontalTitle">
-           <Form.Label column sm={2}>
-             Password
-           </Form.Label>
-           <Col sm={10}>
-             <Form.Control type="password" placeholder="Password"
-               name="password"
-               value={this.state.password}
-               onChange={this.handleInputChange}
-             />
-           </Col>
-         </Form.Group>
-
-         <Form.Group as={Row}>
-           <Col sm={{ span: 10, offset: 2 }}>
-             <Button type="submit">Register</Button>
-           </Col>
-         </Form.Group>
-       </Form>
-     </div>
-     )
-   }
- }
+          <Form.Group as={Row}>
+            <Col sm={{ span: 10, offset: 2 }}>
+              <Button type="submit">Register</Button>
+            </Col>
+          </Form.Group>
+        </Form>
+      </div>
+    );
+  }
+}

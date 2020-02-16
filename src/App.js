@@ -1,8 +1,3 @@
-/**
- * @Date:   2020-02-03T10:14:00+00:00
- * @Last modified time: 2020-02-10T11:40:51+00:00
- */
-
 import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -12,6 +7,16 @@ import BookIndex from "./views/books/Index";
 import BookShow from "./views/books/Show";
 import BookCreate from "./views/books/Create";
 import BookEdit from "./views/books/Edit";
+
+import AuthorIndex from "./views/authors/Index";
+import AuthorShow from "./views/authors/Show";
+import AuthorCreate from "./views/authors/Create";
+import AuthorEdit from "./views/authors/Edit";
+
+import GenreIndex from "./views/genres/Index";
+import GenreShow from "./views/genres/Show";
+import GenreCreate from "./views/genres/Create";
+import GenreEdit from "./views/genres/Edit";
 
 import MyNavbar from "./components/MyNavbar";
 import Register from "./views/auth/Register";
@@ -42,12 +47,28 @@ class App extends React.Component {
           <Row>
             <Col>
               <Switch>
+                {/* Book Routes connected to Compnents */}
                 <Route path="/" exact component={BookIndex} />
                 <Route exact path="/books/create">
                   {loggedIn ? <BookCreate /> : <Redirect to="/" />}
                 </Route>
                 <Route path="/books/:id" exact component={BookShow} />
                 <Route path="/books/update/:id" exact component={BookEdit} />
+                <Route exact path="/authors/create">
+                  {loggedIn ? <AuthorCreate /> : <Redirect to="/authors" />}
+                </Route>
+                {/* Author Routes connected to Compnents */}
+                <Route path="/authors" exact component={AuthorIndex} />
+                <Route path="/authors/:id" exact component={AuthorShow} />
+                <Route
+                  path="/authors/update/:id"
+                  exact
+                  component={AuthorEdit}
+                />
+                {/* Genre Routes connected to Compnents */}
+                <Route path="/genres" exact component={GenreIndex} />
+                <Route path="/genres/:id" exact component={GenreShow} />
+                <Route path="/genres/update/:id" exact component={GenreEdit} />
                 <Route path="/register" exact component={Register} />
                 <Route
                   path="/login"

@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import axios from "axios";
-import propTypes from "prop-types";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
+import propTypes from "prop-types";
+import defaultAuthor from "../../default-author.jpg";
 
 import {
   Card,
+  Image,
   ListGroup,
   ListGroupItem,
   CardColumns,
@@ -17,40 +19,46 @@ import {
 } from "react-bootstrap";
 import defaultCover from "../../placeholder.png";
 
-//Functional Reac Component
-const Book = props => (
+const Author = props => (
   <Card>
-    <Card.Img variant="top" src={defaultCover} />
+    {/* <Card.Img variant="top" src={defaultCover} /> */}
     <Card.Body>
-      <Card.Title>{props.book.title}</Card.Title>
-      <Card.Text>{props.book.description}</Card.Text>
+      <Card.Img src={defaultAuthor} roundedCircle />
+      <Card.Title>{props.author.name}</Card.Title>
     </Card.Body>
+    <ListGroup className="list-group-flush">
+      {props.author.books.map(book => {
+        return <ListGroupItem>{book.title}</ListGroupItem>;
+      })}
+    </ListGroup>
     <Card.Body>
-      <Card.Link href={`books/${props.book._id}`}>Show Book</Card.Link>
+      <Card.Link href={`authors/${props.author._id}`}>Show Author</Card.Link>
     </Card.Body>
+
     <Card.Footer>
-      <small className="text-muted">{props.book.lastUpdated}</small>
+      <small className="text-muted">{props.author.email}</small>
     </Card.Footer>
   </Card>
 );
 
-export default class BookIndex extends Component {
+export default class AuthorIndex extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      books: [],
+      authors: [],
+
       search: ""
     };
   }
 
   componentDidMount() {
     axios
-      .get("http://localhost:4000/books/")
+      .get("http://localhost:4000/authors/")
       .then(response => {
         console.log(response);
         this.setState({
-          books: response.data
+          authors: response.data
         });
       })
       .catch(error => {
@@ -59,35 +67,32 @@ export default class BookIndex extends Component {
   }
   handleInputChange = e => {
     const target = e.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-
-    console.log(`Input name ${name}. Input value ${value}.`);
+    const value = target.value;
 
     this.setState({
       [name]: value
     });
   };
 
-  bookList() {}
-
   render() {
-    let filteredBooks = this.state.books.filter(book => {
-      return book.title.indexOf(this.state.search) !== -1;
+    let filteredAuthors = this.state.authors.filter(author => {
+      return author.name.indexOf(this.state.search) !== -1;
     });
+
     return (
       <>
         <Row>
           <Col sm={12}>
-            <h3>Book List</h3>
+            <h3>Author List</h3>
             <hr />
           </Col>
         </Row>
         <Row>
           <Col sm={8}>
             {localStorage.jwtToken != null ? (
-              <Button as={Link} to="/books/create">
-                Add Book
+              <Button as={Link} to="/authors/create">
+                Add Author
               </Button>
             ) : (
               <>
@@ -115,14 +120,14 @@ export default class BookIndex extends Component {
         </Row>
 
         <CardColumns>
-          {filteredBooks.map(b => {
-            return <Book book={b} key={b._id} />;
+          {filteredAuthors.map(a => {
+            return <Author author={a} key={a._id} />;
           })}
         </CardColumns>
       </>
     );
   }
 }
-BookIndex.propTypes = {
+AuthorIndex.propTypes = {
   search: propTypes.string
 };

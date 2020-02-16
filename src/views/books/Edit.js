@@ -45,6 +45,7 @@ export default class BookEdit extends Component {
       this.setState({
         isbn: result.data.isbn,
         title: result.data.title,
+        description: result.data.description,
         genre_id: result.data.genre_id,
         author_id: result.data.author_id
       });
@@ -124,6 +125,7 @@ export default class BookEdit extends Component {
     const book = {
       isbn: this.state.isbn,
       title: this.state.title,
+      description: this.state.description,
       genre_id: this.state.genre_id,
       author_id: this.state.author_id
     };
@@ -169,6 +171,7 @@ export default class BookEdit extends Component {
             </Form.Label>
             <Col sm={10}>
               <Form.Control
+                required
                 type="text"
                 placeholder="ISBN"
                 name="isbn"
@@ -184,6 +187,7 @@ export default class BookEdit extends Component {
             </Form.Label>
             <Col sm={10}>
               <Form.Control
+                required
                 type="text"
                 placeholder="Title"
                 name="title"
@@ -200,6 +204,7 @@ export default class BookEdit extends Component {
             <Col sm={4}>
               <InputGroup>
                 <Form.Control
+                  required
                   as="select"
                   placeholder="Genre"
                   name="genre_id"
@@ -218,6 +223,7 @@ export default class BookEdit extends Component {
             <Col sm={4}>
               <InputGroup>
                 <Form.Control
+                  required
                   as="select"
                   multiple
                   placeholder="Author"

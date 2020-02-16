@@ -1,19 +1,12 @@
-/**
- * @Date:   2020-02-03T10:14:00+00:00
- * @Last modified time: 2020-02-11T18:03:33+00:00
- */
+const router = require("express").Router();
+const multer = require("multer");
+const uuidv4 = require("uuid/v4");
+const passport = require("passport");
+const settings = require("../config/passport")(passport);
 
-
-
-const router = require('express').Router();
-const multer = require('multer');
-const uuidv4 = require('uuid/v4');
-const passport = require('passport');
-const settings = require('../config/passport')(passport);
-
-const getToken = (headers) => {
+const getToken = headers => {
   if (headers && headers.authorization) {
-    var parted = headers.authorization.split(' ');
+    var parted = headers.authorization.split(" ");
     if (parted.length === 2) {
       return parted[1];
     } else {
@@ -24,47 +17,22 @@ const getToken = (headers) => {
   }
 };
 
-//cb = callback fucnction
-//uuidv4is a Universally unique identifier
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, './');
-    },
-    filename: (req, file, cb) => {
-        const fileName = file.originalname.toLowerCase().split(' ').join('-');
-        cb(null, uuidv4() + '-' + fileName)
-    }
-});
+let Genre = require("../models/Genre");
 
-var upload = multer({
-    storage: storage,
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-            cb(null, true);
-        } else {
-            cb(null, false);
-            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-        }
-    }
-});
-
-let Genre = require('../models/Genre');
-
-
-router.route('/').get((req, res) => {
+router.route("/").get((req, res) => {
   Genre.find()
+    .populate("books")
     .then(genres => res.json(genres))
-    .catch(err => res.status(400).json('Error: ' + err));
+    .catch(err => res.status(400).json("Error: " + err));
 
-   // res.json(genres);
+  // res.json(genres);
 });
-
 
 router.route("/:id").get((req, res) => {
-
   const genreId = req.params.id;
 
   Genre.findById(genreId)
+    .populate("books")
     .then(result => {
       if (!result) {
         return res.status(404).json({
@@ -74,7 +42,7 @@ router.route("/:id").get((req, res) => {
       res.json(result);
     })
     .catch(err => {
-      if (err.kind === 'ObjectId') {
+      if (err.kind === "ObjectId") {
         return res.status(404).json({
           message: "genre not found with id " + genreId
         });
@@ -83,120 +51,127 @@ router.route("/:id").get((req, res) => {
         message: "Error retrieving genre with id " + genreId
       });
     });
-
 });
 
-router.route("/").post(passport.authenticate('jwt', {
-  session: false
-}), (req, res) => {
+router.route("/").post(
+  passport.authenticate("jwt", {
+    session: false
+  }),
+  (req, res) => {
+    const token = getToken(req.headers);
+    const genre = req.body;
+    //validate genre
+    if (token) {
+      if (!genre.name) {
+        return res.status(400).json({
+          message: "genre name can not be empty"
+        });
+      }
+      if (!genre.description) {
+        return res.status(400).json({
+          message: "genre description can not be empty"
+        });
+      }
 
-  const token = getToken(req.headers);
-  const genre = req.body;
-  //validate genre
-  if (token) {
-    if (!genre.isbn) {
-      return res.status(400).json({
-        message: "genre isbn can not be empty"
+      const newGenre = new Genre(genre);
+      console.log(newGenre);
+      newGenre
+        .save()
+        .then(data => {
+          res.json(data);
+        })
+        .catch(err => res.status(400).json("Error: " + err));
+    } else {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized."
       });
     }
-    if (!genre.title) {
-      return res.status(400).json({
-        message: "genre title can not be empty"
-      });
-    }
-
-
-    const newGenre = new Genre(genre);
-    console.log(newGenre);
-    newGenre.save()
-      .then(data => {
-        res.json(data);
-      })
-      .catch(err => res.status(400).json('Error: ' + err));
-
-  } else {
-    return res.status(403).json({
-      success: false,
-      message: 'Unauthorized.'
-    });
   }
-});
+);
 
-router.route("/:id").put(passport.authenticate('jwt', {
-  session: false
-}), (req, res) => {
-  const token = getToken(req.headers);
-  const genreId = req.params.id;
-  const newGenre = req.body;
-  if (token) {
-    if (!newGenre.title) {
-      return res.status(400).json({
-        message: "Genre title can not be empty"
-      });
-    }
+router.route("/:id").put(
+  passport.authenticate("jwt", {
+    session: false
+  }),
+  (req, res) => {
+    const token = getToken(req.headers);
+    const genreId = req.params.id;
+    const newGenre = req.body;
+    if (token) {
+      if (!newGenre.description) {
+        return res.status(400).json({
+          message: "Genre description can not be empty"
+        });
+      }
 
-    // Find Genre and update it with the request body
-    Genre.findByIdAndUpdate(genreId, newGenre, {
+      // Find Genre and update it with the request body
+      Genre.findByIdAndUpdate(genreId, newGenre, {
         new: true
       })
-      .then(genre => {
-        if (!genre) {
-          return res.status(404).json({
-            message: "genre not found with id " + genreId
+        .then(genre => {
+          if (!genre) {
+            return res.status(404).json({
+              message: "genre not found with id " + genreId
+            });
+          }
+          res.json(genre);
+        })
+        .catch(err => {
+          if (err.kind === "ObjectId") {
+            return res.status(404).json({
+              message: "genre not found with id " + genreId
+            });
+          }
+          return res.status(500).json({
+            message: "Error updating genre with id " + genreId
           });
-        }
-        res.json(genre);
-      }).catch(err => {
-        if (err.kind === 'ObjectId') {
-          return res.status(404).json({
-            message: "genre not found with id " + genreId
-          });
-        }
-        return res.status(500).json({
-          message: "Error updating genre with id " + genreId
         });
+    } else {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized"
       });
-  } else {
-    return res.status(403).json({
-      success: false,
-      message: 'Unauthorized'
-    });
+    }
   }
-});
+);
 
-router.route("/:id").delete(passport.authenticate('jwt', {
-  session: false
-}), (req, res) => {
-  const token = getToken(req.headers);
-  const genreId = req.params.id;
-  if (token) {
-    Genre.findByIdAndRemove(genreId)
-      .then(genre => {
-        if (!genre) {
-          return res.status(404).json({
-            message: "genre not found with id " + genreId
+router.route("/:id").delete(
+  passport.authenticate("jwt", {
+    session: false
+  }),
+  (req, res) => {
+    const token = getToken(req.headers);
+    const genreId = req.params.id;
+    if (token) {
+      Genre.findByIdAndRemove(genreId)
+        .then(genre => {
+          if (!genre) {
+            return res.status(404).json({
+              message: "genre not found with id " + genreId
+            });
+          }
+          res.json({
+            message: "genre deleted successfully!"
           });
-        }
-        res.json({
-          message: "genre deleted successfully!"
-        });
-      }).catch(err => {
-        if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-          return res.status(404).json({
-            message: "genre not found with id " + genreId
+        })
+        .catch(err => {
+          if (err.kind === "ObjectId" || err.name === "NotFound") {
+            return res.status(404).json({
+              message: "genre not found with id " + genreId
+            });
+          }
+          return res.status(500).send({
+            message: "Could not delete genre with id " + genreId
           });
-        }
-        return res.status(500).send({
-          message: "Could not delete genre with id " + genreId
         });
+    } else {
+      return res.status(403).json({
+        success: false,
+        messsage: "Unuthorized"
       });
-  } else {
-    return res.status(403).json({
-      success: false,
-      messsage: 'Unuthorized'
-    });
+    }
   }
-});
-
+);
 
 module.exports = router;

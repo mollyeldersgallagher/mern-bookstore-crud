@@ -9,12 +9,12 @@ import Alert from "react-bootstrap/Alert";
 const Genre = props => <Badge variant="light">{props.genre}</Badge>;
 const Author = props => <Badge variant="light">{props.author}</Badge>;
 
-export default class BookShow extends Component {
+export default class AuthorShow extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      book: {},
+      author: {},
       show: false,
       loading: true
     };
@@ -24,11 +24,11 @@ export default class BookShow extends Component {
     const { id } = this.props.match.params;
 
     axios
-      .get(`http://localhost:4000/books/${id}`)
+      .get(`http://localhost:4000/authors/${id}`)
       .then(response => {
         console.log(response);
         this.setState({
-          book: response.data,
+          author: response.data,
           loading: false
         });
       })
@@ -43,11 +43,11 @@ export default class BookShow extends Component {
       "jwtToken"
     );
     axios
-      .delete(`http://localhost:4000/books/${id}`)
+      .delete(`http://localhost:4000/authors/${id}`)
       .then(response => {
         console.log(response);
         this.setState({
-          book: response.data,
+          author: response.data,
           loading: false
         });
       })
@@ -57,23 +57,14 @@ export default class BookShow extends Component {
     window.location = "/";
   }
 
-  genreList() {
-    return this.state.book.genre_id.map((currentGenre, index) => {
-      return <Genre genre={currentGenre.name} key={index} />;
-    });
-  }
-  authorList() {
-    return this.state.book.author_id.map((currentAuthor, index) => {
-      return <Author author={currentAuthor.name} key={index} />;
-    });
-  }
   AlertDismissible() {
     return (
       <>
         <Alert show={this.state.show} variant="secondary">
           <Alert.Heading>Confirm</Alert.Heading>
           <p>
-            Are you sure you want to delete this book - {this.state.book.title}
+            Are you sure you want to delete this author -{" "}
+            {this.state.author.name}
           </p>
           <hr />
           <div className="d-flex justify-content-end">
@@ -93,7 +84,7 @@ export default class BookShow extends Component {
   }
 
   render() {
-    const { book, loading, show } = this.state;
+    const { author, loading, show } = this.state;
 
     if (loading) {
       return (
@@ -108,15 +99,13 @@ export default class BookShow extends Component {
         <br />
         <Card>
           {this.AlertDismissible()}
-          <Card.Header as="h5">
-            {book.title} <span className="float-right">{this.genreList()}</span>
-          </Card.Header>
+          <Card.Header as="h5">{author.name}</Card.Header>
 
           <Card.Body>
             <Card.Title>Synopsis</Card.Title>
-            <Card.Text>{this.state.book.description}</Card.Text>
+            <Card.Text>There is no synopsis in the DB</Card.Text>
             <Button as={Link} to="/" variant="primary">
-              View all books
+              View all authors
             </Button>
             <Button
               as={Link}
@@ -131,7 +120,7 @@ export default class BookShow extends Component {
             </Button>
           </Card.Body>
           <Card.Footer>
-            <span className="float-right">{this.authorList()}</span>
+            <span className="float-right">{this.state.email}</span>
           </Card.Footer>
         </Card>
       </div>

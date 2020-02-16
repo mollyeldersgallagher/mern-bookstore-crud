@@ -70,6 +70,7 @@ export default class Login extends Component {
             </Form.Label>
             <Col sm={10}>
               <Form.Control
+                required
                 type="email"
                 placeholder="Email"
                 name="email"
@@ -85,6 +86,7 @@ export default class Login extends Component {
             </Form.Label>
             <Col sm={10}>
               <Form.Control
+                required
                 type="password"
                 placeholder="Password"
                 name="password"
