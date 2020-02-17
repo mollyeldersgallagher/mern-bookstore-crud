@@ -1,14 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
 import propTypes from "prop-types";
-import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 
 import {
   Card,
-  Container,
-  ListGroup,
-  ListGroupItem,
   CardColumns,
   Button,
   Col,
@@ -19,7 +15,6 @@ import {
 
 const Genre = props => (
   <Card>
-    {/* <Card.Img variant="top" src={defaultCover} /> */}
     <Card.Body>
       <Card.Title>{props.genre.name}</Card.Title>
     </Card.Body>
@@ -67,7 +62,7 @@ export default class GenreIndex extends Component {
 
   render() {
     let filteredGenres = this.state.genres.filter(genre => {
-      return genre.name.indexOf(this.state.search) !== -1;
+      return genre.name.toLowerCase().indexOf(this.state.search) !== -1;
     });
     return (
       <>

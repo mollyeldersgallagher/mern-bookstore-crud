@@ -10,7 +10,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
-import Badge from "react-bootstrap/Badge";
 
 const Genre = props => (
   <option value={props.genre._id}> {props.genre.name} </option>
@@ -197,6 +196,21 @@ export default class BookEdit extends Component {
             </Col>
           </Form.Group>
 
+          <Form.Group as={Row} controlId="formHorizontalDescription">
+            <Form.Label column sm={2}>
+              Description
+            </Form.Label>
+            <Col sm={10}>
+              <Form.Control
+                required
+                type="text"
+                placeholder="Description"
+                name="description"
+                value={this.state.description}
+                onChange={this.handleInputChange}
+              />
+            </Col>
+          </Form.Group>
           <Form.Group as={Row} controlId="formHorizontalGenre">
             <Form.Label column sm={2}>
               Genre
@@ -206,6 +220,7 @@ export default class BookEdit extends Component {
                 <Form.Control
                   required
                   as="select"
+                  multiple
                   placeholder="Genre"
                   name="genre_id"
                   onChange={this.addGenre}

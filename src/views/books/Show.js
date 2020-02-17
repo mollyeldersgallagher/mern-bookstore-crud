@@ -4,10 +4,13 @@ import { Link } from "react-router-dom";
 import Badge from "react-bootstrap/Badge";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import Alert from "react-bootstrap/Alert";
+import { Alert, Row, Col, ListGroupItem, ListGroup } from "react-bootstrap";
+import placeholder from "../../placeholder.png";
 
 const Genre = props => <Badge variant="light">{props.genre}</Badge>;
-const Author = props => <Badge variant="light">{props.author}</Badge>;
+const Author = props => {
+  return <ListGroupItem>{props.author}</ListGroupItem>;
+};
 
 export default class BookShow extends Component {
   constructor(props) {
@@ -46,15 +49,11 @@ export default class BookShow extends Component {
       .delete(`http://localhost:4000/books/${id}`)
       .then(response => {
         console.log(response);
-        this.setState({
-          book: response.data,
-          loading: false
-        });
+        window.location = "/";
       })
       .catch(error => {
         console.log(error);
       });
-    window.location = "/";
   }
 
   genreList() {
@@ -112,26 +111,61 @@ export default class BookShow extends Component {
             {book.title} <span className="float-right">{this.genreList()}</span>
           </Card.Header>
 
-          <Card.Body>
-            <Card.Title>Synopsis</Card.Title>
-            <Card.Text>{this.state.book.description}</Card.Text>
-            <Button as={Link} to="/" variant="primary">
-              View all books
-            </Button>
-            <Button
-              as={Link}
-              onClick={() => {
-                this.setState({
-                  show: true
-                });
-              }}
-              variant="danger"
-            >
-              Delete
-            </Button>
-          </Card.Body>
+          <Row>
+            <Col sm={6}>
+              <Card.Body>
+                <Card.Img src={placeholder} roundedCircle />
+              </Card.Body>
+            </Col>
+            <Col sm={6}>
+              <Card.Body>
+                <Card.Title>Synopsis</Card.Title>
+                <Card.Text>{this.state.book.description}</Card.Text>
+              </Card.Body>
+              <Card.Body>
+                <Card.Title>Authors</Card.Title>
+                <ListGroup>{this.authorList()}</ListGroup>
+              </Card.Body>
+            </Col>
+          </Row>
           <Card.Footer>
-            <span className="float-right">{this.authorList()}</span>
+            <span className="float-left">
+              {
+                <Button as={Link} to="/" variant="primary">
+                  View all books
+                </Button>
+              }
+            </span>
+            {localStorage.jwtToken != null ? (
+              <>
+                <span className="float-left">
+                  {
+                    <Button
+                      as={Link}
+                      to={`/books/update/${this.state.book._id}`}
+                      variant="primary"
+                    >
+                      Update Book
+                    </Button>
+                  }
+                </span>
+                <span className="float-right">
+                  <Button
+                    as={Link}
+                    onClick={() => {
+                      this.setState({
+                        show: true
+                      });
+                    }}
+                    variant="danger"
+                  >
+                    Delete
+                  </Button>
+                </span>
+              </>
+            ) : (
+              <></>
+            )}
           </Card.Footer>
         </Card>
       </div>

@@ -1,13 +1,41 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import Badge from "react-bootstrap/Badge";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
+import { ListGroup, ListGroupItem, Row, Col } from "react-bootstrap";
+import defaultAuthor from "../../default-author.jpg";
 
-const Genre = props => <Badge variant="light">{props.genre}</Badge>;
-const Author = props => <Badge variant="light">{props.author}</Badge>;
+//Functional Components
+const Author = props => (
+  <>
+    <Row>
+      <Col sm={6}>
+        <Card.Body>
+          <Card.Img src={defaultAuthor} roundedCircle />
+        </Card.Body>
+      </Col>
+      <Col sm={6}>
+        <Card.Body>
+          <Card.Title>Books</Card.Title>
+          <ListGroup>
+            {props.author.books.map(book => {
+              return <ListGroupItem>{book.title}</ListGroupItem>;
+            })}
+          </ListGroup>
+        </Card.Body>
+        <Card.Body>
+          <Card.Title>Contact</Card.Title>
+          <ListGroup>
+            <ListGroupItem>{props.author.email}</ListGroupItem>
+            <ListGroupItem>{props.author.phone}</ListGroupItem>
+          </ListGroup>
+        </Card.Body>
+      </Col>
+    </Row>
+  </>
+);
 
 export default class AuthorShow extends Component {
   constructor(props) {
@@ -45,18 +73,15 @@ export default class AuthorShow extends Component {
     axios
       .delete(`http://localhost:4000/authors/${id}`)
       .then(response => {
-        console.log(response);
-        this.setState({
-          author: response.data,
-          loading: false
-        });
+        window.location = "/authors";
       })
       .catch(error => {
         console.log(error);
       });
-    window.location = "/";
+    // window.location
   }
 
+  // DELETE confirmation before hitting endpoint. Show and hide by setting state
   AlertDismissible() {
     return (
       <>
@@ -88,42 +113,62 @@ export default class AuthorShow extends Component {
 
     if (loading) {
       return (
-        <div>
+        <>
           <h3>Loading...</h3>
-        </div>
+        </>
       );
     }
 
     return (
-      <div>
+      <>
         <br />
         <Card>
           {this.AlertDismissible()}
-          <Card.Header as="h5">{author.name}</Card.Header>
+          <Card.Header as="h5">{this.state.author.name}</Card.Header>
 
-          <Card.Body>
-            <Card.Title>Synopsis</Card.Title>
-            <Card.Text>There is no synopsis in the DB</Card.Text>
-            <Button as={Link} to="/" variant="primary">
-              View all authors
-            </Button>
-            <Button
-              as={Link}
-              onClick={() => {
-                this.setState({
-                  show: true
-                });
-              }}
-              variant="danger"
-            >
-              Delete
-            </Button>
-          </Card.Body>
+          <Author author={this.state.author} />
           <Card.Footer>
-            <span className="float-right">{this.state.email}</span>
+            <span className="float-left">
+              {
+                <Button as={Link} to="/authors" variant="primary">
+                  View all authors
+                </Button>
+              }
+            </span>
+            {/* conditional component rendering, show buttons for crud abilities if signed in */}
+            {localStorage.jwtToken != null ? (
+              <>
+                <span className="float-left">
+                  {
+                    <Button
+                      as={Link}
+                      to={`/authors/update/${this.state.author._id}`}
+                      variant="primary"
+                    >
+                      Update Author
+                    </Button>
+                  }
+                </span>
+                <span className="float-right">
+                  <Button
+                    as={Link}
+                    onClick={() => {
+                      this.setState({
+                        show: true
+                      });
+                    }}
+                    variant="danger"
+                  >
+                    Delete
+                  </Button>
+                </span>
+              </>
+            ) : (
+              <></>
+            )}
           </Card.Footer>
         </Card>
-      </div>
+      </>
     );
   }
 }

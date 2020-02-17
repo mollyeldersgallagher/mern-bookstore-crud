@@ -33,6 +33,7 @@ export default class Register extends Component {
       password: this.state.password
     };
 
+    //Posting a new user object to REST api end points
     axios
       .post("http://localhost:4000/account/register", user)
       .then(res => console.log(res.data))

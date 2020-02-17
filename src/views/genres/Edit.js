@@ -9,8 +9,6 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import InputGroup from "react-bootstrap/InputGroup";
-import Badge from "react-bootstrap/Badge";
 
 export default class GenreEdit extends Component {
   constructor(props) {
@@ -28,7 +26,7 @@ export default class GenreEdit extends Component {
     axios.defaults.headers.common["Authorization"] = localStorage.getItem(
       "jwtToken"
     );
-    axios.get(`http://localhost:4000/authors/${id}`).then(result => {
+    axios.get(`http://localhost:4000/genres/${id}`).then(result => {
       console.log(result);
       this.setState({
         name: result.data.name,
@@ -51,7 +49,7 @@ export default class GenreEdit extends Component {
     e.preventDefault();
     const { id } = this.props.match.params;
 
-    const author = {
+    const genre = {
       name: this.state.name,
       description: this.state.description
     };
@@ -60,9 +58,10 @@ export default class GenreEdit extends Component {
       "jwtToken"
     );
     axios
-      .put(`http://localhost:4000/authors/${id}`, author)
+      .put(`http://localhost:4000/genres/${id}`, genre)
       .then(res => {
         console.log(res.data);
+        window.location = "/genres";
       })
       .catch(err => {
         console.log(err);
@@ -76,7 +75,7 @@ export default class GenreEdit extends Component {
         <Form onSubmit={this.onSubmit}>
           <Form.Group as={Row} controlId="formHorizontalName">
             <Form.Label column sm={2}>
-              Name
+              Genre Name
             </Form.Label>
             <Col sm={10}>
               <Form.Control

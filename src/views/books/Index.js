@@ -1,13 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
 import propTypes from "prop-types";
-import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 
 import {
   Card,
-  ListGroup,
-  ListGroupItem,
   CardColumns,
   Button,
   Col,
@@ -59,7 +56,7 @@ export default class BookIndex extends Component {
   }
   handleInputChange = e => {
     const target = e.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
+    const value = target.value;
     const name = target.name;
 
     console.log(`Input name ${name}. Input value ${value}.`);
@@ -68,12 +65,24 @@ export default class BookIndex extends Component {
       [name]: value
     });
   };
+  handleSearchInput = e => {
+    const target = e.target;
+    const value = target.value;
+    const name = target.name;
+
+    console.log(`Input name ${name}. Input value ${value}.`);
+
+    this.setState({
+      search: value
+    });
+  };
 
   bookList() {}
 
   render() {
     let filteredBooks = this.state.books.filter(book => {
-      return book.title.indexOf(this.state.search) !== -1;
+      console.log(book.title);
+      return book.title.toLowerCase().indexOf(this.state.search) !== -1;
     });
     return (
       <>
@@ -108,7 +117,7 @@ export default class BookIndex extends Component {
                 aria-label="Search"
                 aria-describedby="basic-addon1"
                 value={this.state.search}
-                onChange={this.handleInputChange}
+                onChange={this.handleSearchInput}
               />
             </InputGroup>
           </Col>

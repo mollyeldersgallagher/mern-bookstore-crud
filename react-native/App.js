@@ -17,7 +17,7 @@ export default class FetchExample extends React.Component {
         this.setState(
           {
             isLoading: false,
-            books: this.responseJson
+            books: this.responseJson.data
           },
           function() {}
         );

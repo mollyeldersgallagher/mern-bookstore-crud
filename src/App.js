@@ -32,6 +32,8 @@ class App extends React.Component {
       loggedIn: localStorage.getItem("jwtToken") !== null
     };
   }
+
+  //Handeling the login, setting state and props
   authHandler = () => {
     this.setState((state, props) => ({
       loggedIn: state.loggedIn ? false : true
@@ -46,6 +48,7 @@ class App extends React.Component {
         <Container>
           <Row>
             <Col>
+              {/* switching in and out components  */}
               <Switch>
                 {/* Book Routes connected to Compnents */}
                 <Route path="/" exact component={BookIndex} />
@@ -66,14 +69,19 @@ class App extends React.Component {
                   component={AuthorEdit}
                 />
                 {/* Genre Routes connected to Compnents */}
+                <Route exact path="/genres/create">
+                  {loggedIn ? <GenreCreate /> : <Redirect to="/genres" />}
+                </Route>
                 <Route path="/genres" exact component={GenreIndex} />
                 <Route path="/genres/:id" exact component={GenreShow} />
                 <Route path="/genres/update/:id" exact component={GenreEdit} />
+
                 <Route path="/register" exact component={Register} />
                 <Route
                   path="/login"
                   exact
                   component={props => (
+                    //passing props down through components
                     <Login {...props} onLogin={this.authHandler} />
                   )}
                 />

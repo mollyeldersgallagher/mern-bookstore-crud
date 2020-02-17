@@ -12,9 +12,11 @@ export default class MyNavbar extends Component {
   logout = () => {
     localStorage.removeItem("jwtToken");
     this.props.onLogout();
+    window.location = "/";
   };
 
   render() {
+    //Passing props from one component to another
     const loggedIn = this.props.loggedIn;
     return (
       <Navbar

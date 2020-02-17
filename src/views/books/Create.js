@@ -10,7 +10,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
-import Badge from "react-bootstrap/Badge";
 
 const Genre = props => (
   <option value={props.genre._id}> {props.genre.name} </option>
@@ -62,12 +61,9 @@ export default class BookCreate extends Component {
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
 
-    console.log(`Input name ${name}. Input value ${value}.`);
-
     this.setState({
       [name]: value
     });
-    console.log(this.state.author_id);
   };
 
   addAuthor = e => {
@@ -153,8 +149,6 @@ export default class BookCreate extends Component {
         console.log(err);
         window.location = "/books/create";
       });
-
-    window.location = "/";
   };
 
   genreList() {

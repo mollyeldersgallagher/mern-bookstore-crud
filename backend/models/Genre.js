@@ -19,6 +19,9 @@ const GenreSchema = new mongoose.Schema(
   { toJSON: { virtuals: true } }
 );
 
+// Virtuals provides the capability of reverse population.
+// In this case returning all the books with the genre
+
 GenreSchema.virtual("books", {
   ref: "Book",
   localField: "_id",

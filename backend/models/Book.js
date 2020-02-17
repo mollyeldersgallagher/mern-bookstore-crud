@@ -5,6 +5,9 @@
 
 const mongoose = require("mongoose");
 
+//Book Schema that contains two foreign keys creating many to many relationship
+// as a book can have many author ideas, leaving authors to have many books
+
 const BookSchema = new mongoose.Schema({
   isbn: {
     type: String,

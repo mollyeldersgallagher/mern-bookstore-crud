@@ -4,8 +4,6 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import InputGroup from "react-bootstrap/InputGroup";
-import Badge from "react-bootstrap/Badge";
 
 export default class AuthorCreate extends Component {
   constructor(props) {
@@ -19,11 +17,12 @@ export default class AuthorCreate extends Component {
   }
 
   componentDidMount() {
+    //setting headers to authorization and getting token from local storage
     axios.defaults.headers.common["Authorization"] = localStorage.getItem(
       "jwtToken"
     );
   }
-
+  //Handleing input changes
   handleInputChange = e => {
     const target = e.target;
     const value = target.value;
@@ -34,6 +33,7 @@ export default class AuthorCreate extends Component {
     });
   };
 
+  //Onsubmit hitting the REST API end points
   onSubmit = e => {
     e.preventDefault();
 
@@ -52,7 +52,7 @@ export default class AuthorCreate extends Component {
       .post("http://localhost:4000/authors", author)
       .then(res => {
         console.log(res.data);
-        window.location = "/";
+        window.location = "/authors";
       })
       .catch(err => {
         console.log(err);

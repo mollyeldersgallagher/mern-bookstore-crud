@@ -4,8 +4,6 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import InputGroup from "react-bootstrap/InputGroup";
-import Badge from "react-bootstrap/Badge";
 
 export default class GenreCreate extends Component {
   constructor(props) {
@@ -50,10 +48,11 @@ export default class GenreCreate extends Component {
       .post("http://localhost:4000/genres", genre)
       .then(res => {
         console.log(res.data);
-        window.location = "/";
+        window.location = "/genres";
       })
       .catch(err => {
         console.log(err);
+        window.location = "/genres/create";
       });
   };
 
@@ -64,7 +63,7 @@ export default class GenreCreate extends Component {
         <Form onSubmit={this.onSubmit} encType="multipart/form-data">
           <Form.Group as={Row} controlId="formHorizontalName">
             <Form.Label column sm={2}>
-              Name
+              Genre Name
             </Form.Label>
             <Col sm={10}>
               <Form.Control
@@ -79,12 +78,12 @@ export default class GenreCreate extends Component {
 
           <Form.Group as={Row} controlId="formHorizontalDescription">
             <Form.Label column sm={2}>
-              Email
+              Description
             </Form.Label>
             <Col sm={10}>
               <Form.Control
                 type="text"
-                placeholder="Email"
+                placeholder="Description"
                 name="description"
                 value={this.state.description}
                 onChange={this.handleInputChange}

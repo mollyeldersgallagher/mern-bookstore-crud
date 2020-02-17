@@ -17,8 +17,10 @@ const app = express();
 app.use(body_parser.json());
 app.use(cors());
 
+//Pulling api from the env file
 const uri = process.env.ATLAS_URI;
 
+// establishing a database connection
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -30,20 +32,20 @@ const connection = mongoose.connection;
 // Grid.mongo = mongoose.mongo;
 // let gfs = Grid(mongoose.connection.db, mongoose.mongo);
 
-app.use(function(req, res, next) {
-  //allow cross origin requests
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "POST, PUT, OPTIONS, DELETE, GET"
-  );
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.header("Access-Control-Allow-Credentials", true);
-  next();
-});
+// app.use(function(req, res, next) {
+//   //allow cross origin requests
+//   res.setHeader(
+//     "Access-Control-Allow-Methods",
+//     "POST, PUT, OPTIONS, DELETE, GET"
+//   );
+//   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   res.header("Access-Control-Allow-Credentials", true);
+//   next();
+// });
 
 connection.once("open", () => {
   //Initialising the stream
@@ -131,6 +133,8 @@ connection.once("open", () => {
 app.get("/", (req, res) => {
   res.json({ message: "You are in the root route" });
 });
+
+//Setting Express paths to routers
 
 app.use("/books", booksRouter);
 app.use("/authors", authorsRouter);

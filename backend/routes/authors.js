@@ -4,6 +4,7 @@ const uuidv4 = require("uuid/v4");
 const passport = require("passport");
 const settings = require("../config/passport")(passport);
 
+// Gets token if the user is logged in to send the token in a header
 const getToken = headers => {
   if (headers && headers.authorization) {
     var parted = headers.authorization.split(" ");
@@ -17,9 +18,12 @@ const getToken = headers => {
   }
 };
 
+// requiring
 let Author = require("../models/Author");
 let Book = require("../models/Book");
 
+// Specified endpoints
+// GET all authors with their related books
 router.route("/").get((req, res) => {
   Author.find()
     .populate("books")
@@ -27,10 +31,12 @@ router.route("/").get((req, res) => {
     .catch(err => res.status(400).json("Error: " + err));
 });
 
+// GET the book with that id and its related books
 router.route("/:id").get((req, res) => {
   const authorId = req.params.id;
 
   Author.findById(authorId)
+    .populate("books")
     .then(result => {
       if (!result) {
         return res.status(404).json({
@@ -51,6 +57,7 @@ router.route("/:id").get((req, res) => {
     });
 });
 
+// POST author object to the database
 router.route("/").post(
   passport.authenticate("jwt", {
     session: false
@@ -87,6 +94,7 @@ router.route("/").post(
   }
 );
 
+// PUT the new author object into the database updating the existing document
 router.route("/:id").put(
   passport.authenticate("jwt", {
     session: false
@@ -133,6 +141,7 @@ router.route("/:id").put(
   }
 );
 
+// DELETE the author with the id secifid through parameters
 router.route("/:id").delete(
   passport.authenticate("jwt", {
     session: false

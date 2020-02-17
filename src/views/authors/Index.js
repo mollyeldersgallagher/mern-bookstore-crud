@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import propTypes from "prop-types";
 import defaultAuthor from "../../default-author.jpg";
 
 import {
   Card,
-  Image,
   ListGroup,
   ListGroupItem,
   CardColumns,
@@ -17,11 +15,10 @@ import {
   InputGroup,
   FormControl
 } from "react-bootstrap";
-import defaultCover from "../../placeholder.png";
 
+//Functional component and handeling props
 const Author = props => (
   <Card>
-    {/* <Card.Img variant="top" src={defaultCover} /> */}
     <Card.Body>
       <Card.Img src={defaultAuthor} roundedCircle />
       <Card.Title>{props.author.name}</Card.Title>
@@ -77,7 +74,7 @@ export default class AuthorIndex extends Component {
 
   render() {
     let filteredAuthors = this.state.authors.filter(author => {
-      return author.name.indexOf(this.state.search) !== -1;
+      return author.name.toLowerCase().indexOf(this.state.search) !== -1;
     });
 
     return (
@@ -120,6 +117,7 @@ export default class AuthorIndex extends Component {
         </Row>
 
         <CardColumns>
+          {/* mapping the functional components and looping through them */}
           {filteredAuthors.map(a => {
             return <Author author={a} key={a._id} />;
           })}
@@ -128,6 +126,7 @@ export default class AuthorIndex extends Component {
     );
   }
 }
+//Prop types insuring that only a string is being inputed
 AuthorIndex.propTypes = {
   search: propTypes.string
 };

@@ -4,8 +4,6 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import InputGroup from "react-bootstrap/InputGroup";
-import Badge from "react-bootstrap/Badge";
 
 export default class AuthorEdit extends Component {
   constructor(props) {
@@ -18,6 +16,7 @@ export default class AuthorEdit extends Component {
     };
   }
 
+  //Hits two endpoints, one to get the author by id and another to put a new object in its place
   componentDidMount() {
     const { id } = this.props.match.params;
 
@@ -64,7 +63,9 @@ export default class AuthorEdit extends Component {
       })
       .catch(err => {
         console.log(err);
+        window.location = `/authors/update/${id}`;
       });
+    window.location = "/authors";
   };
 
   render() {

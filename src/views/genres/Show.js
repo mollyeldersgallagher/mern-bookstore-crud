@@ -1,10 +1,36 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import Badge from "react-bootstrap/Badge";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import { Alert, ListGroup, ListGroupItem } from "react-bootstrap";
+import Alert from "react-bootstrap/Alert";
+import { ListGroup, ListGroupItem, Row, Col } from "react-bootstrap";
+
+const Genre = props => (
+  <>
+    <Row>
+      <Col sm={6}>
+        <Card.Body>
+          <Card.Title>Genre</Card.Title>
+          <ListGroup>
+            <ListGroupItem>{props.genre.name}</ListGroupItem>
+            <ListGroupItem>{props.genre.description}</ListGroupItem>
+          </ListGroup>
+        </Card.Body>
+      </Col>
+      <Col sm={6}>
+        <Card.Body>
+          <Card.Title>Books</Card.Title>
+          <ListGroup>
+            {props.genre.books.map(book => {
+              return <ListGroupItem>{book.title}</ListGroupItem>;
+            })}
+          </ListGroup>
+        </Card.Body>
+      </Col>
+    </Row>
+  </>
+);
 
 export default class GenreShow extends Component {
   constructor(props) {
@@ -42,16 +68,12 @@ export default class GenreShow extends Component {
     axios
       .delete(`http://localhost:4000/genres/${id}`)
       .then(response => {
-        console.log(response);
-        this.setState({
-          genre: response.data,
-          loading: false
-        });
+        console.log(response.data);
+        window.location = "/genres";
       })
       .catch(error => {
         console.log(error);
       });
-    window.location = "/";
   }
 
   AlertDismissible() {
@@ -84,48 +106,61 @@ export default class GenreShow extends Component {
 
     if (loading) {
       return (
-        <div>
+        <>
           <h3>Loading...</h3>
-        </div>
+        </>
       );
     }
 
     return (
-      <div>
+      <>
         <br />
         <Card>
           {this.AlertDismissible()}
-          <Card.Header as="h5">{genre.name}</Card.Header>
+          <Card.Header as="h5">{this.state.genre.name}</Card.Header>
 
-          <Card.Body>
-            <Card.Title>Synopsis</Card.Title>
-            <Card.Text>There is no synopsis in the DB</Card.Text>
-
-            <Button as={Link} to="/" variant="primary">
-              View all genres
-            </Button>
-            <Button
-              as={Link}
-              onClick={() => {
-                this.setState({
-                  show: true
-                });
-              }}
-              variant="danger"
-            >
-              Delete
-            </Button>
-          </Card.Body>
-          <ListGroup className="list-group-flush">
-            {this.state.genre.books.map(book => {
-              return <ListGroupItem>{book.title}</ListGroupItem>;
-            })}
-          </ListGroup>
+          <Genre genre={this.state.genre} />
           <Card.Footer>
-            <span className="float-right">{this.state.description}</span>
+            <span className="float-left">
+              {
+                <Button as={Link} to="/genres" variant="primary">
+                  View all Genres
+                </Button>
+              }
+            </span>
+            {localStorage.jwtToken != null ? (
+              <>
+                <span className="float-left">
+                  {
+                    <Button
+                      as={Link}
+                      to={`/genres/update/${this.state.genre._id}`}
+                      variant="primary"
+                    >
+                      Update Genre
+                    </Button>
+                  }
+                </span>
+                <span className="float-right">
+                  <Button
+                    as={Link}
+                    onClick={() => {
+                      this.setState({
+                        show: true
+                      });
+                    }}
+                    variant="danger"
+                  >
+                    Delete
+                  </Button>
+                </span>
+              </>
+            ) : (
+              <></>
+            )}
           </Card.Footer>
         </Card>
-      </div>
+      </>
     );
   }
 }
