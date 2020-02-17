@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const multer = require("multer");
-const uuidv4 = require("uuid/v4");
 const passport = require("passport");
 const settings = require("../config/passport")(passport);
 
