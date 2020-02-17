@@ -21,7 +21,7 @@ const Book = props => (
     <Card.Img variant="top" src={defaultCover} />
     <Card.Body>
       <Card.Title>{props.book.title}</Card.Title>
-      <Card.Text>{props.book.description.subtr(0, 20) + "..."}</Card.Text>
+      <Card.Text>{props.book.description.substr(0, 20) + "..."}</Card.Text>
     </Card.Body>
     <Card.Body>
       <Card.Link href={`books/${props.book._id}`}>Show Book</Card.Link>
