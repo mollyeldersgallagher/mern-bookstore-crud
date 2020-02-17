@@ -9,6 +9,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+const rest_api = process.env.REACT_APP_SERVER;
 
 export default class GenreEdit extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ export default class GenreEdit extends Component {
     axios.defaults.headers.common["Authorization"] = localStorage.getItem(
       "jwtToken"
     );
-    axios.get(`http://localhost:4000/genres/${id}`).then(result => {
+    axios.get(`${rest_api}/genres/${id}`).then(result => {
       console.log(result);
       this.setState({
         name: result.data.name,
@@ -58,7 +59,7 @@ export default class GenreEdit extends Component {
       "jwtToken"
     );
     axios
-      .put(`http://localhost:4000/genres/${id}`, genre)
+      .put(`${rest_api}/genres/${id}`, genre)
       .then(res => {
         console.log(res.data);
         window.location = "/genres";

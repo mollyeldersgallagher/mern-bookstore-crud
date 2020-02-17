@@ -141,7 +141,9 @@ app.use("/authors", authorsRouter);
 app.use("/genres", genresRouter);
 app.use("/account", authRouter);
 
-const port = 4000;
+const port = process.env.PORT || 4000;
+// const server = process.env.REACT_APP_BACKEND;
+console.log(this.server);
 
 app.listen(port, () => {
   console.log(`Server listening on ${port}`);

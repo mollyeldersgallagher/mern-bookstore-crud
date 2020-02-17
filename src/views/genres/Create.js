@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+const rest_api = process.env.REACT_APP_SERVER;
 
 export default class GenreCreate extends Component {
   constructor(props) {
@@ -45,7 +46,7 @@ export default class GenreCreate extends Component {
     );
 
     axios
-      .post("http://localhost:4000/genres", genre)
+      .post(`${rest_api}/genres`, genre)
       .then(res => {
         console.log(res.data);
         window.location = "/genres";

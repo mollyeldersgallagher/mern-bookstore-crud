@@ -8,6 +8,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+const rest_api = process.env.REACT_APP_SERVER;
 
 export default class Login extends Component {
   constructor(props) {
@@ -42,7 +43,7 @@ export default class Login extends Component {
     console.log(user);
     //On submit posting a user object to REST api endpoint
     axios
-      .post("http://localhost:4000/account/login", user)
+      .post(`${rest_api}/account/login`, user)
       .then(res => {
         // save token in local storage if user exists and signs in successfully
         localStorage.setItem("jwtToken", res.data.token);

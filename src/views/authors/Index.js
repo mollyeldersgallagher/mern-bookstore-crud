@@ -16,6 +16,7 @@ import {
   FormControl
 } from "react-bootstrap";
 
+const rest_api = process.env.REACT_APP_SERVER;
 //Functional component and handeling props
 const Author = props => (
   <Card>
@@ -51,7 +52,7 @@ export default class AuthorIndex extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:4000/authors/")
+      .get(`${rest_api}/authors/`)
       .then(response => {
         console.log(response);
         this.setState({

@@ -6,6 +6,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { Alert, Row, Col, ListGroupItem, ListGroup } from "react-bootstrap";
 import placeholder from "../../placeholder.png";
+const rest_api = process.env.REACT_APP_SERVER;
 
 const Genre = props => <Badge variant="light">{props.genre}</Badge>;
 const Author = props => {
@@ -27,7 +28,7 @@ export default class BookShow extends Component {
     const { id } = this.props.match.params;
 
     axios
-      .get(`http://localhost:4000/books/${id}`)
+      .get(`${rest_api}/books/${id}`)
       .then(response => {
         console.log(response);
         this.setState({
@@ -46,7 +47,7 @@ export default class BookShow extends Component {
       "jwtToken"
     );
     axios
-      .delete(`http://localhost:4000/books/${id}`)
+      .delete(`${rest_api}/books/${id}`)
       .then(response => {
         console.log(response);
         window.location = "/";

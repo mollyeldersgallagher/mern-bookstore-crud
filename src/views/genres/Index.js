@@ -13,6 +13,8 @@ import {
   FormControl
 } from "react-bootstrap";
 
+const rest_api = process.env.REACT_APP_SERVER;
+
 const Genre = props => (
   <Card>
     <Card.Body>
@@ -39,7 +41,7 @@ export default class GenreIndex extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:4000/genres/")
+      .get(`${rest_api}/genres/`)
       .then(response => {
         console.log(response);
         this.setState({

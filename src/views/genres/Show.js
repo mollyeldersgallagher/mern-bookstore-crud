@@ -5,6 +5,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import { ListGroup, ListGroupItem, Row, Col } from "react-bootstrap";
+const rest_api = process.env.REACT_APP_SERVER;
 
 const Genre = props => (
   <>
@@ -45,9 +46,8 @@ export default class GenreShow extends Component {
 
   componentDidMount() {
     const { id } = this.props.match.params;
-
     axios
-      .get(`http://localhost:4000/genres/${id}`)
+      .get(`${rest_api}/genres/${id}`)
       .then(response => {
         console.log(response);
         this.setState({
@@ -66,7 +66,7 @@ export default class GenreShow extends Component {
       "jwtToken"
     );
     axios
-      .delete(`http://localhost:4000/genres/${id}`)
+      .delete(`${rest_api}/genres/${id}`)
       .then(response => {
         console.log(response.data);
         window.location = "/genres";

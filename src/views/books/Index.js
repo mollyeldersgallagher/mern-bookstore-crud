@@ -13,6 +13,7 @@ import {
   FormControl
 } from "react-bootstrap";
 import defaultCover from "../../placeholder.png";
+let rest_api = process.env.REACT_APP_SERVER;
 
 //Functional Reac Component
 const Book = props => (
@@ -43,7 +44,7 @@ export default class BookIndex extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:4000/books/")
+      .get(`${rest_api}/books/`)
       .then(response => {
         console.log(response);
         this.setState({
@@ -53,6 +54,7 @@ export default class BookIndex extends Component {
       .catch(error => {
         console.log(error);
       });
+    console.log(rest_api);
   }
   handleInputChange = e => {
     const target = e.target;

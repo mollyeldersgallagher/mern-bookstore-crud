@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+const rest_api = process.env.REACT_APP_SERVER;
 
 export default class Register extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ export default class Register extends Component {
 
     //Posting a new user object to REST api end points
     axios
-      .post("http://localhost:4000/account/register", user)
+      .post(`${rest_api}/account/register`, user)
       .then(res => console.log(res.data))
       .catch(err => console.log(err));
 

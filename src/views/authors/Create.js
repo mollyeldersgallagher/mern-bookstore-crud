@@ -5,6 +5,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
+const rest_api = process.env.REACT_APP_SERVER;
+
 export default class AuthorCreate extends Component {
   constructor(props) {
     super(props);
@@ -49,7 +51,7 @@ export default class AuthorCreate extends Component {
     );
 
     axios
-      .post("http://localhost:4000/authors", author)
+      .post(`${rest_api}/authors`, author)
       .then(res => {
         console.log(res.data);
         window.location = "/authors";

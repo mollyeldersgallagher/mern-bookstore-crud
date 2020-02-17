@@ -7,6 +7,8 @@ import Alert from "react-bootstrap/Alert";
 import { ListGroup, ListGroupItem, Row, Col } from "react-bootstrap";
 import defaultAuthor from "../../default-author.jpg";
 
+const rest_api = process.env.REACT_APP_SERVER;
+
 //Functional Components
 const Author = props => (
   <>
@@ -52,7 +54,7 @@ export default class AuthorShow extends Component {
     const { id } = this.props.match.params;
 
     axios
-      .get(`http://localhost:4000/authors/${id}`)
+      .get(`${rest_api}/authors/${id}`)
       .then(response => {
         console.log(response);
         this.setState({
@@ -71,7 +73,7 @@ export default class AuthorShow extends Component {
       "jwtToken"
     );
     axios
-      .delete(`http://localhost:4000/authors/${id}`)
+      .delete(`${rest_api}/authors/${id}`)
       .then(response => {
         window.location = "/authors";
       })

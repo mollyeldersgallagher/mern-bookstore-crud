@@ -10,6 +10,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
+const rest_api = process.env.REACT_APP_SERVER;
 
 const Genre = props => (
   <option value={props.genre._id}> {props.genre.name} </option>
@@ -39,13 +40,13 @@ export default class BookCreate extends Component {
     axios.defaults.headers.common["Authorization"] = localStorage.getItem(
       "jwtToken"
     );
-    axios.get(`http://localhost:4000/authors`).then(authors => {
+    axios.get(`${rest_api}/authors`).then(authors => {
       console.log(authors);
       this.setState({
         authors: authors.data
       });
     });
-    axios.get(`http://localhost:4000/genres`).then(genres => {
+    axios.get(`${rest_api}/genres`).then(genres => {
       console.log(genres);
       this.setState({
         genres: genres.data
@@ -140,7 +141,7 @@ export default class BookCreate extends Component {
     );
 
     axios
-      .post("http://localhost:4000/books", book)
+      .post(`${rest_api}/books`, book)
       .then(res => {
         console.log(res.data);
         window.location = "/";

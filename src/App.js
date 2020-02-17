@@ -24,6 +24,7 @@ import Login from "./views/auth/Login";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+require("dotenv").config();
 
 class App extends React.Component {
   constructor(props) {

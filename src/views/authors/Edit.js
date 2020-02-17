@@ -5,6 +5,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
+const rest_api = process.env.REACT_APP_SERVER;
+
 export default class AuthorEdit extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +25,7 @@ export default class AuthorEdit extends Component {
     axios.defaults.headers.common["Authorization"] = localStorage.getItem(
       "jwtToken"
     );
-    axios.get(`http://localhost:4000/authors/${id}`).then(result => {
+    axios.get(`${rest_api}/authors/${id}`).then(result => {
       console.log(result);
       this.setState({
         name: result.data.name,
@@ -57,7 +59,7 @@ export default class AuthorEdit extends Component {
       "jwtToken"
     );
     axios
-      .put(`http://localhost:4000/authors/${id}`, author)
+      .put(`${rest_api}/authors/${id}`, author)
       .then(res => {
         console.log(res.data);
       })
